@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class CrawlersConfig(AppConfig):
+class SynthesisConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.crawlers'
+    name = 'apps.synthesis'
 
     def ready(self):
-        import apps.crawlers.signals
+        import apps.synthesis.signals

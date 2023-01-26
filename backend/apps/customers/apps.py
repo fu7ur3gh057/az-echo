@@ -1,9 +1,9 @@
 from django.apps import AppConfig
 
 
-class CrawlersConfig(AppConfig):
+class CustomersConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'apps.crawlers'
+    name = 'apps.customers'
 
     def ready(self):
-        import apps.crawlers.signals
+        import apps.customers.signals
