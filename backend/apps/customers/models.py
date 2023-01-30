@@ -1,10 +1,12 @@
 import uuid
-
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import TimeStampedUUIDModel
+
+User = get_user_model()
 
 
 class Customer(TimeStampedUUIDModel):
@@ -15,6 +17,7 @@ class Customer(TimeStampedUUIDModel):
         ('ru', 'Русский'),
         ('en', 'English'),
     )
+    user = models.OneToOneField(User, related_name='customer', on_delete=models.CASCADE, null=True)
     # Company name: Report
     name = models.CharField(max_length=70, blank=False)
     # Domain name : https://www.report.az/
@@ -30,7 +33,6 @@ class Customer(TimeStampedUUIDModel):
     negative_words = ArrayField(models.CharField(max_length=512, blank=True, null=True),
                                 verbose_name=_("Negative Words"),
                                 null=True)
-
     # For Javascript Widget, and Rest API
     api_token = models.UUIDField(blank=False, null=True, max_length=50, default=uuid.uuid4)
 

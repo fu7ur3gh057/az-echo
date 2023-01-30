@@ -16,5 +16,5 @@ urlpatterns = [
     path('reset-password', ResetPasswordRequestAPIView.as_view(), name='reset_password'),
     path('set-password', SetNewPasswordAPIView.as_view(), name='add_new_password'),
     path('delete/', delete_user, name='delete'),
-    path('lol/', lol, name='delete'),
+    path('lol/', lol, name='lol'),
 ]

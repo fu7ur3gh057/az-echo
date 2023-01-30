@@ -1,7 +1,9 @@
+from datetime import datetime
 import jwt
 import redis
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
+from django.db.models import Q
 from django.urls import reverse
 from rest_framework import generics, permissions, status
 from rest_framework import views
@@ -10,13 +12,11 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView
-
-from apps.crawler.tasks import extract_task
+from apps.payments.models import Subscription
 from apps.users.api.serializers import RegisterSerializer, EmailVerificationSerializer, MyTokenObtainPairSerializer, \
     UpdatePasswordSerializer
 from apps.users.models import User
 from apps.users.tasks import activate_user
-from services.digger_service import DiggerService
 
 # Redis Client
 redis_client = redis.Redis(host=f"localhost", port=6379, db=1, decode_responses=True)
@@ -123,4 +123,18 @@ def delete_user(request: Request):
 
 @api_view(['GET'])
 def lol(request: Request):
+    today = datetime.today()
+    # s1 = Subscription.objects.all().filter(type=1).first()
+    # dt2 = s1.expire_date
+    # Active subscriptions
+    subscriptions = Subscription.objects.all().filter(Q(expire_date__lt=today) & Q(type=1))
+    # today = datetime.today().date()
+    # subscriptions = Subscription.objects.all().filter(type=1)
+    for subscription in subscriptions:
+        subscription.type = 2
+        subscription.save()
+        # expire_date = subscription.expire_date.date()
+        # if expire_date > today:
+        #     subscription.type = 2
+        #     subscription.save()
     return Response('', status=status.HTTP_200_OK)

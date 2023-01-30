@@ -13,7 +13,7 @@ class RepositoryAdmin(admin.ModelAdmin):
     list_display_links = ['pkid', "customer"]
 
     def blacklist_size(self, obj):
-        return len(obj.black_list)
+        return len(obj.blacklist)
 
 
 admin.site.register(Customer, CustomerAdmin)

@@ -6,7 +6,9 @@ from utils.task_util import TaskStatus, get_time_interval
 
 
 @receiver(post_save, sender=Generator)
-def update_generator_task(sender, instance, created, **kwargs):
+def create_or_update_generator_task(sender, instance, created, **kwargs):
+    if created:
+        instance.setup_task()
     if not created:
         if instance.task is not None:
             instance.task.enabled = instance.status == TaskStatus.active

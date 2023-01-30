@@ -12,6 +12,7 @@ class TimeInterval(Enum):
     ten_min = '10 mins'
     thirty_min = '30 mins'
     one_hour = '1 hour'
+    one_day = '1 day'
 
 
 class TaskStatus(Enum):
@@ -41,4 +42,6 @@ def get_time_interval(time: str):
     # 1 hour
     if time is TimeInterval.one_hour:
         return IntervalSchedule.objects.get(every=1, period='hours')
+    if time is TimeInterval.one_day:
+        return IntervalSchedule.objects.get(every=1, period="days")
     raise NotImplementedError

@@ -7,6 +7,8 @@ API_URL = 'api/v1'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path(f'{API_URL}/auth/', include('apps.users.api.urls')),
+    path(f'{API_URL}/payments/', include('apps.payments.api.urls')),
 ]
 
 if settings.DEBUG:

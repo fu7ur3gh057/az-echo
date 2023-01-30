@@ -1,0 +1,75 @@
+.azreco-player-container {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    /*width: 50px;*/
+    /*height: 50px;*/
+    border-radius: 10px;
+    border: none;
+    background-color: #f0f0f3;
+    position: fixed;
+    right: 40px;
+    bottom: 40px;
+    cursor: pointer;
+    transition: all 0.5s ease-in-out;
+    z-index: 999999999;
+    /*box-shadow: 0 5px 10px 0 rgba(0, 0, 0, 0.5);*/
+    box-shadow: 5px 5px 11px #bababc, -5px -5px 11px #cacadf;
+}
+
+.azreco-play-pause-button {
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+.azreco-play-pause-button:hover {
+    transform: translate(0%, -3%);
+}
+
+
+.azreco-stop-button {
+    padding: 5px 10px;
+    border-right: 1px solid #a9a9a9;
+    transition: all 0.3s ease-in-out;
+}
+
+.azreco-stop-button:hover {
+    transform: translate(0%, -3%);
+}
+
+
+.azreco-logo-container {
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: all 0.3s ease-in-out;
+}
+
+/*.azreco-logo-container:hover {*/
+/*    transform: translate(0%,-3%);*/
+/*}*/
+
+.azreco-play-pause-image {
+    width: 20px;
+    height: 20px;
+    filter: invert(59%) sepia(0%) saturate(1609%) hue-rotate(55deg) brightness(88%) contrast(83%);
+}
+
+.azreco-stop-image {
+    width: 20px;
+    height: 20px;
+    filter: invert(19%) sepia(62%) saturate(7217%) hue-rotate(356deg) brightness(99%) contrast(120%);
+}
+
+.azreco-logo-image {
+    width: 20px;
+    height: 20px;
+}
+
+/*.azreco-link {*/
+/*    width: 100%;*/
+/*    height: 100%;*/
+/*    text-decoration: none;*/
+/*}*/

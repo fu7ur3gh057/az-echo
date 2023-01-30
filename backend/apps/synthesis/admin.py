@@ -15,7 +15,7 @@ class SynthesisAdmin(admin.ModelAdmin):
 
 
 class GeneratorAdmin(admin.ModelAdmin):
-    list_display = ['interval', 'status', 'created_at']
+    list_display = ['interval', 'status']
     list_display_links = ['interval']
 
 

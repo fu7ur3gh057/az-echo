@@ -9,6 +9,7 @@ from django_enum_choices.fields import EnumChoiceField
 
 from apps.customers.models import Repository
 from utils.task_util import TimeInterval, TaskStatus, get_time_interval
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Synthesis(TimeStampedUUIDModel):
@@ -32,10 +33,17 @@ class Synthesis(TimeStampedUUIDModel):
 
 
 # Task Class for Generating Synthesis for all customers
-class Generator(TimeStampedUUIDModel):
+class Generator(models.Model):
     task = models.OneToOneField(PeriodicTask, related_name="generator_task", on_delete=models.CASCADE,
                                 null=True, blank=True, verbose_name=_("Synthesis Generator Task"))
-    generation_count = models.IntegerField(default=1, help_text="Maximum count of generation")
+    generation_count = models.IntegerField(default=1,
+                                           help_text="Maximum count of generations, min value = 1, max value = 5",
+                                           validators=[MinValueValidator(1),
+                                                       MaxValueValidator(5)])
+    generation_timeout = models.IntegerField(default=3,
+                                             help_text="Generation timeout in sec, min value = 3, max value = 10",
+                                             validators=[MinValueValidator(3),
+                                                         MaxValueValidator(10)])
     interval = EnumChoiceField(TimeInterval, default=TimeInterval.one_min)
     status = EnumChoiceField(TaskStatus, default=TaskStatus.active)
 

@@ -2,7 +2,7 @@
 
 # CELERY WORKER & BEAT
 
-until cd /app/server; do
+until cd /app/backend; do
   echo "Waiting for server volume..."
 done
 
@@ -15,4 +15,4 @@ cp stopwords/stopwords-az.txt /usr/local/lib/python3.10/site-packages/newspaper/
 cp stopwords/stopwords-az.txt /usr/local/lib/python3.10/site-packages/goose3/resources/text
 
 # run a worker and beat
-celery -A server worker --beat --scheduler django --loglevel=info
+celery -A backend worker --beat --scheduler django --loglevel=info
