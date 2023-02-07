@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, pre_delete, post_delete
 from django.dispatch import receiver
 
 from apps.crawlers.models import Echo, Driller
@@ -6,6 +6,7 @@ from apps.customers.models import Repository
 from utils.task_util import TaskStatus, get_time_interval
 
 
+# ECHO
 @receiver(post_save, sender=Repository)
 def create_echo(sender, instance, created, **kwargs):
     if created:
@@ -28,6 +29,17 @@ def create_or_update_echo_tasks(sender, instance, created, **kwargs):
             instance.extract_task.save()
 
 
+@receiver(post_delete, sender=Echo)
+def delete_echo_task(sender, instance, *args, **kwargs):
+    if instance.discover_task is not None:
+        print(f'Deleting Discover Task')
+        instance.discover_task.delete()
+    if instance.extract_task is not None:
+        print('Deleting Extract Task')
+        instance.extract_task.delete()
+
+
+# DRILLER
 @receiver(post_save, sender=Driller)
 def create_or_update_driller_task(sender, instance, created, **kwargs):
     if created:

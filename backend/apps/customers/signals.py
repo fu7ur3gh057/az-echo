@@ -1,4 +1,4 @@
-from django.db.models.signals import post_save, post_delete
+from django.db.models.signals import post_save, pre_delete
 from django.dispatch import receiver
 
 from apps.customers.models import Customer, Repository
@@ -13,7 +13,7 @@ def create_repository(sender, instance, created, **kwargs):
 
 
 # Delete Customer's blacklist from Redis
-@receiver(post_delete, sender=Repository)
+@receiver(pre_delete, sender=Repository)
 def delete_repository(sender, instance, *args, **kwargs):
     blacklist_id = f'blacklist_{instance.pkid}'
     RedisClient().flush_keys(key=blacklist_id)

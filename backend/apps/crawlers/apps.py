@@ -9,4 +9,3 @@ class CrawlersConfig(AppConfig):
 
     def ready(self):
         import apps.crawlers.signals
-        RedisClient().flush_all()

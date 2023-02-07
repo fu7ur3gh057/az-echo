@@ -42,8 +42,9 @@ class RedisClient:
         self._redis_client.lpush(key, value)
 
     def flush_keys(self, key):
-        if self.key_exists(key=key):
-            self._redis_client.delete(*key)
+        keys = self._redis_client.scan_iter(match=f"{key}*")
+        for key in keys:
+            self._redis_client.delete(key)
 
     def flush_all(self):
         self._redis_client.flushall()

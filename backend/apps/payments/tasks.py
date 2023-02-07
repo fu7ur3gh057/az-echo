@@ -28,9 +28,6 @@ def subscription_checker_task():
             subscriptions = Subscription.objects.all().filter(Q(type=1) & Q(expire_date__lt=today))
             for subscription in subscriptions:
                 # Subscription expire date ended and this object not canceled
-                try:
-                    subscription.type = 2
-                    subscription.save()
-                except Exception as ex:
-                    logger.info(ex)
+                subscription.type = 2
+                subscription.save()
             redis_client.delete_key(key=lock_id)

@@ -40,7 +40,6 @@ def discover_task(self, echo_id):
             logger.info('start service')
             data = service.start()
             to_blacklist = data['blacklist']
-            logger.info(f'blacklist {len(to_blacklist)}')
             new_links = data['new_links']
             # create synthesis objects
             if new_links is not None and len(new_links) != 0:

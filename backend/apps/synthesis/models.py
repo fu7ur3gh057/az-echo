@@ -34,8 +34,8 @@ class Synthesis(TimeStampedUUIDModel):
 
 # Task Class for Generating Synthesis for all customers
 class Generator(models.Model):
-    task = models.OneToOneField(PeriodicTask, related_name="generator_task", on_delete=models.CASCADE,
-                                null=True, blank=True, verbose_name=_("Synthesis Generator Task"))
+    task = models.ForeignKey(PeriodicTask, related_name="generator_task", on_delete=models.CASCADE,
+                             null=True, blank=True, verbose_name=_("Synthesis Generator Task"))
     generation_count = models.IntegerField(default=1,
                                            help_text="Maximum count of generations, min value = 1, max value = 5",
                                            validators=[MinValueValidator(1),

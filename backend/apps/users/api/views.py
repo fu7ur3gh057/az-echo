@@ -2,6 +2,7 @@ from datetime import datetime
 import jwt
 import redis
 from django.conf import settings
+from django.contrib.auth import authenticate
 from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import Q
 from django.urls import reverse
@@ -10,7 +11,7 @@ from rest_framework import views
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.request import Request
 from rest_framework.response import Response
-from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.tokens import RefreshToken, AccessToken
 from rest_framework_simplejwt.views import TokenObtainPairView
 from apps.payments.models import Subscription
 from apps.users.api.serializers import RegisterSerializer, EmailVerificationSerializer, MyTokenObtainPairSerializer, \
@@ -98,6 +99,35 @@ class LogoutAPIView(views.APIView):
             return Response('successful logout', status=status.HTTP_205_RESET_CONTENT)
         except Exception as ex:
             return Response(f'{ex}', status=status.HTTP_400_BAD_REQUEST)
+
+
+class VerifyJWT(views.APIView):
+    def get(self, request: Request):
+        try:
+            token = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
+            payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+            user = User.objects.get(id=payload['user_id'])
+            if user is not None:
+                return Response({"message": "JWT is valid"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"message": "JWT is invalid"}, status=status.HTTP_401_UNAUTHORIZED)
+        except (IndexError, jwt.DecodeError):
+            return Response({"message": "JWT is invalid"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['GET'])
+def verify_jwt(request: Request):
+    try:
+        token = request.META["HTTP_AUTHORIZATION"].split(" ")[1]
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=['HS256'])
+        user = User.objects.get(id=payload['user_id'])
+        access_token = AccessToken(token=token)
+        access_token.check_exp()
+        return Response("JWT is valid", status=status.HTTP_200_OK)
+    except (IndexError, jwt.DecodeError):
+        return Response({"message": "JWT is invalid"}, status=status.HTTP_401_UNAUTHORIZED)
+    except (jwt.exceptions.ExpiredSignatureError, KeyError):
+        return Response({"message": "JWT is expired"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
 # RESET PASSWORD REQUEST TODO
