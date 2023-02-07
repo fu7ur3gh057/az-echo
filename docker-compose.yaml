@@ -27,11 +27,11 @@ services:
       - "5431:5432"
     networks:
       - azecho-net
-  selenium:
-    image: selenium/standalone-chrome
-    container_name: azecho-selenium
-    ports:
-      - "4444:4444"
+  #selenium:
+   # image: selenium/standalone-chrome
+    #container_name: azecho-selenium
+    #ports:
+    #  - "4444:4444"
     restart: always
     # DJANGO SERVER
   django:
@@ -51,7 +51,6 @@ services:
     depends_on:
       - postgres
       - redis
-      - selenium
     networks:
       - azecho-net
   # CELERY WORKER & BEAT
@@ -79,6 +78,20 @@ services:
       - redis-data:/var/lib/redis/
     depends_on:
       - redis
+    #FAST API WEBSOCKETS
+  fastapi:
+    restart: always
+    container_name: azecho-fastapi
+    build:
+      context: ./websocket/
+      dockerfile: Dockerfile
+    ports:
+      - "8088:8088"
+    depends_on:
+      - django
+      - postgres
+    networks:
+        - azecho-net
       # REACT CLIENT
       #client:
       # restart: always

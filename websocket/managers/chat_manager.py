@@ -12,9 +12,7 @@ class ChatManager:
     async def get_notification_generator(self):
         while True:
             message = yield
-            msg = message['message']
-            room_name = message['room_name']
-            await self.notify(msg, room_name)
+            await self.notify(message)
 
     # Get all members by room name
     def get_members(self, room_name):
@@ -45,15 +43,17 @@ class ChatManager:
         print(f'CONNECTION REMOVED: {self.connections[room_name]}')
 
     # Notify all members by room name
-    async def notify(self, message: str, room_name: str):
+    async def notify(self, message):
         living_connections = []
+        room_id = message['room_id']
+        text = message['text']
         # while any connections with current room name
-        while len(self.connections[room_name]) > 0:
+        while len(self.connections[room_id]) > 0:
             # pop websocket from connections
-            websocket = self.connections[room_name].pop()
-            # send text to websocket
-            await websocket.send_text(message)
+            websocket = self.connections[room_id].pop()
+            # send json to websocket
+            await websocket.send_json(message)
             # add to list for not to lose websockets
             living_connections.append(websocket)
         # returning back all websockets to connections
-        self.connections[room_name] = living_connections
+        self.connections[room_id] = living_connections
